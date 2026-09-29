@@ -27,24 +27,37 @@ This file provides guidance to agents when working with code in this repository 
 - **Run Tests**:
   ```bash
   npm test
-  # or: node --test test/*.test.js
+  ```
+- **Multi-Project Management & Cross-Machine State**:
+  ```bash
+  # List all projects and current active pointer
+  node bin/cli.js list
+
+  # Switch active project
+  node bin/cli.js use <slug>
+
+  # Inspect project status, full event history, and handoff resume prompt
+  node bin/cli.js info [slug]
+
+  # Log a milestone or action note to project history
+  node bin/cli.js log <slug> --action "milestone_name" --note "Details" --status completed
   ```
 - **Verify & Pre-Commit Audit Site**:
   ```bash
   node bin/cli.js verify <targetDir>
   # Audits CSS fixed navbar, broken internal links, image alts, viewport, SEO, canonicals, robots.txt & sitemap.xml
   ```
-- **Create New Website**:
+- **Create New Website (Auto-Registers Project)**:
   ```bash
-  node bin/cli.js new ./sites/<site-dir> --name "<Site Name>" --desc "<Description>"
+  node bin/cli.js new ./projects/<site-slug> --name "<Site Name>" --desc "<Description>"
   ```
 - **Analyze Website**:
   ```bash
   node bin/cli.js analyze <URL or local path>
   ```
-- **Enhance & Redesign Website**:
+- **Enhance & Redesign Website (Auto-Registers Project)**:
   ```bash
-  node bin/cli.js enhance <URL or local path> ./sites/<out-dir> --name "<Site Name>"
+  node bin/cli.js enhance <URL or local path> ./projects/<out-dir> --name "<Site Name>"
   ```
 
 ---

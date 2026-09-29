@@ -13,19 +13,34 @@ A fast, lightweight website generator and AI-powered website redesign engine ins
 
 ## 🚀 Quick Start (CLI)
 
-### 1. Create a New Website
+### 1. Multi-Project Management & Handoff (Cross-Machine)
 ```bash
-node bin/cli.js new ./sites/my-awesome-site --name "Acme Studio" --desc "Design & Engineering"
+# List all registered projects
+node bin/cli.js list
+
+# Switch active workspace
+node bin/cli.js use the-barbers-at-number-two
+
+# View status, timeline history, and AI resume prompt
+node bin/cli.js info
+
+# Log milestone or task completion
+node bin/cli.js log the-barbers-at-number-two --action "completed_pricing" --note "Updated prices table"
 ```
 
-### 2. Analyze a Website
+### 2. Create a New Website
+```bash
+node bin/cli.js new ./projects/my-awesome-site --name "Acme Studio" --desc "Design & Engineering"
+```
+
+### 3. Analyze a Website
 ```bash
 node bin/cli.js analyze https://example.com
 ```
 
-### 3. Enhance & Redesign a Website
+### 4. Enhance & Redesign a Website
 ```bash
-node bin/cli.js enhance https://example.com ./sites/example-redesign --name "Example Reimagined"
+node bin/cli.js enhance https://example.com ./projects/example-redesign --name "Example Reimagined"
 ```
 
 ---

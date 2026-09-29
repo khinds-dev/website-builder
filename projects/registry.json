@@ -1,0 +1,37 @@
+{
+  "version": "1.0.0",
+  "activeProject": "the-barbers-at-number-two",
+  "projects": {
+    "the-barbers-at-number-two": {
+      "slug": "the-barbers-at-number-two",
+      "name": "The Barbers At Number Two",
+      "status": "completed",
+      "type": "redesign",
+      "path": "showcase/the-barbers-at-number-two",
+      "sourceUrl": "http://thebarbersatnumberone.co.uk/",
+      "createdAt": "2026-09-29T20:00:00.000Z",
+      "updatedAt": "2026-09-29T21:30:00.000Z",
+      "summary": "Full 8-page responsive barbershop redesign with zero-framework vanilla stack, design tokens, authentic social links, Dockerfile, Nginx config, robots.txt, and sitemap.xml.",
+      "history": [
+        {
+          "timestamp": "2026-09-29T20:15:00.000Z",
+          "action": "scaffold_and_audit",
+          "note": "Audited original source URL and generated 8 semantic pages with custom amber design tokens.",
+          "pages": ["index.html", "price-list", "find-us", "team", "products", "faq", "contact", "404.html"]
+        },
+        {
+          "timestamp": "2026-09-29T21:10:00.000Z",
+          "action": "fix_social_links",
+          "note": "Restored authentic Facebook, Instagram, and WhatsApp URLs across all pages.",
+          "pages": ["index.html", "price-list", "find-us", "team", "products", "faq", "contact"]
+        },
+        {
+          "timestamp": "2026-09-29T21:30:00.000Z",
+          "action": "verification_and_docs",
+          "note": "Ran QA audit (8/8 pages passed) and published PROGRESS.md.",
+          "pages": ["PROGRESS.md"]
+        }
+      ]
+    }
+  }
+}
