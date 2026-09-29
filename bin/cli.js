@@ -28,7 +28,7 @@ Examples:
   site-builder new ./my-new-site --name "Acme Studio"
   site-builder analyze https://example.com
   site-builder enhance https://example.com ./redesigned-example
-  site-builder verify ./showcase/the-barbers-at-number-one
+  site-builder verify ./showcase/the-barbers-at-number-two
 `);
 }
 

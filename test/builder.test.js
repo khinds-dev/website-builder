@@ -54,7 +54,7 @@ describe('Website Builder & Analyzer Tests', () => {
   });
 
   it('should run auditDirectory and verify the showcase website passes all checks', async () => {
-    const showcaseDir = path.resolve('./showcase/the-barbers-at-number-one');
+    const showcaseDir = path.resolve('./showcase/the-barbers-at-number-two');
     const report = await auditDirectory(showcaseDir);
     
     assert.strictEqual(report.status, 'PASSED');
