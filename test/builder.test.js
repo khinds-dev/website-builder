@@ -61,5 +61,6 @@ describe('Website Builder & Analyzer Tests', () => {
     assert.strictEqual(report.totalIssues, 0);
     assert.strictEqual(report.totalPages, 8);
     assert.ok(report.cssRulesPassed.length >= 3);
+    assert.strictEqual(report.metaPassed.length, 2);
   });
 });

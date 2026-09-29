@@ -213,13 +213,33 @@ export async function auditDirectory(targetDir) {
     });
   }
 
-  const totalIssues = cssIssues.length + pageResults.reduce((acc, p) => acc + p.issues.length, 0);
+  // 8. Sitemap & Robots Audit
+  let metaIssues = [];
+  let metaPassed = [];
+  const hasRobots = await fileExists(path.join(resolvedDir, 'robots.txt'));
+  const hasSitemap = await fileExists(path.join(resolvedDir, 'sitemap.xml'));
+
+  if (hasRobots) {
+    metaPassed.push('robots.txt present in root directory');
+  } else {
+    metaIssues.push({ file: 'robots.txt', severity: 'low', message: 'Missing robots.txt in root directory.' });
+  }
+
+  if (hasSitemap) {
+    metaPassed.push('sitemap.xml present in root directory');
+  } else {
+    metaIssues.push({ file: 'sitemap.xml', severity: 'low', message: 'Missing sitemap.xml in root directory.' });
+  }
+
+  const totalIssues = cssIssues.length + metaIssues.length + pageResults.reduce((acc, p) => acc + p.issues.length, 0);
 
   return {
     targetDir: resolvedDir,
     totalPages: htmlFiles.length,
     cssRulesPassed,
     cssIssues,
+    metaPassed,
+    metaIssues,
     pageResults,
     totalIssues,
     status: totalIssues === 0 ? 'PASSED' : 'ACTION_REQUIRED'
@@ -247,4 +267,13 @@ async function findFiles(dir, pattern) {
     }
   }
   return results;
+}
+
+async function fileExists(filePath) {
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
 }

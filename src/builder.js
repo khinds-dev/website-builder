@@ -130,7 +130,8 @@ export async function createWebsite(targetDir, options = {}) {
   await fs.writeFile(path.join(resolvedTarget, '404.html'), errorHtml, 'utf8');
 
   // 6. robots.txt & sitemap.xml
-  await fs.writeFile(path.join(resolvedTarget, 'robots.txt'), 'User-agent: *\nAllow: /\n', 'utf8');
+  await fs.writeFile(path.join(resolvedTarget, 'robots.txt'), 'User-agent: *\nAllow: /\n\nSitemap: /sitemap.xml\n', 'utf8');
+  await fs.copyFile(path.join(ASSETS_DIR, 'sitemap.xml'), path.join(resolvedTarget, 'sitemap.xml'));
 
   return { success: true, targetDir: resolvedTarget };
 }
@@ -168,6 +169,10 @@ export async function enhanceWebsite(source, outputDir, options = {}) {
     </section>`
   });
   await fs.writeFile(path.join(resolvedOutput, '404.html'), errorHtml, 'utf8');
+
+  // 4. robots.txt & sitemap.xml
+  await fs.writeFile(path.join(resolvedOutput, 'robots.txt'), 'User-agent: *\nAllow: /\n\nSitemap: /sitemap.xml\n', 'utf8');
+  await fs.copyFile(path.join(ASSETS_DIR, 'sitemap.xml'), path.join(resolvedOutput, 'sitemap.xml'));
 
   return {
     success: true,

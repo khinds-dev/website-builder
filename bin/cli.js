@@ -129,6 +129,16 @@ async function main() {
         report.cssIssues.forEach(i => console.log(`  [${i.severity.toUpperCase()}] ${i.file}: ${i.message}`));
       }
 
+      if (report.metaPassed && report.metaPassed.length > 0) {
+        console.log('\n🤖 Crawler & Discovery:');
+        report.metaPassed.forEach(p => console.log(`  ✓ ${p}`));
+      }
+
+      if (report.metaIssues && report.metaIssues.length > 0) {
+        console.log('\n⚠️  Discovery Issues:');
+        report.metaIssues.forEach(i => console.log(`  [${i.severity.toUpperCase()}] ${i.file}: ${i.message}`));
+      }
+
       console.log('\n📄 Page Details:');
       for (const page of report.pageResults) {
         if (page.issues.length === 0) {
