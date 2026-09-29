@@ -18,6 +18,7 @@ This file provides guidance to agents when working with code in this repository 
 - **Routing**: Clean URLs via subdirectories containing `index.html` (e.g. `about/index.html` served at `/about/`). Never hardcode `.html` extensions in navigation links.
 - **Shared Design Tokens**: All generated sites utilize `css/shared.css` with CSS variables for light & dark modes, layout max-width, spacing, and typography.
 - **Fixed Navbar Standard**: Always adhere to `position: fixed` for `.navbar` with `padding-top: var(--nav-height)` on `body` and `scroll-padding-top: var(--nav-height)` on `html`. Never use `position: sticky` on a flex `body`.
+- **External Link & Contact Fidelity**: Never modify, invent, or rebrand external URLs, social media handles (`facebook.com`, `instagram.com`, `whatsapp.com`, etc.), phone numbers, or addresses when redesigning or creating showcase variations. All real-world external links must be preserved verbatim.
 
 ---
 
