@@ -28,6 +28,7 @@ Project Lifecycle & Cross-Machine Portability:
   site-builder list                        List all tracked projects and active state
   site-builder use <slug>                  Switch active project
   site-builder info [slug]                 Show status, history & handoff prompt for a project
+  site-builder handoff [slug]              Generate copy-paste AI resume prompt for Bob
   site-builder log <slug> --action <act>   Append milestone note to project history
 
 Site Generation & QA:
@@ -100,6 +101,29 @@ async function main() {
       console.log(`\n✅ Switched active project to: ${p.name} (${slug})`);
       console.log(`   Path: ${p.path}`);
       console.log(`   Status: ${p.status}`);
+    } else if (command === 'handoff') {
+      const slug = args[1];
+      const handoff = await getProjectHandoff(slug);
+      if (!handoff.project) {
+        console.log(`\n⚠️  ${handoff.message}`);
+        process.exit(0);
+      }
+      const p = handoff.project;
+      console.log(`\n======================================================================`);
+      console.log(`🤖 COPY-PASTE CONTINUATION PROMPT FOR BOB`);
+      console.log(`======================================================================\n`);
+      console.log(`Resume work on the website project "${p.name}".`);
+      console.log(`- Project Slug: ${p.slug}`);
+      console.log(`- Directory Path: ${p.path}`);
+      console.log(`- Current Status: ${p.status}`);
+      if (p.sourceUrl) console.log(`- Original Source: ${p.sourceUrl}`);
+      console.log(`- Summary: ${p.summary}`);
+      console.log(`\nRecent Timeline & Completed Milestones:`);
+      p.history.slice(-5).forEach(h => {
+        console.log(`  • [${h.timestamp.split('T')[0]}] ${h.action}: ${h.note}`);
+      });
+      console.log(`\nPlease read ${p.path}/PROGRESS.md (if present) and continue the next tasks.\n`);
+      console.log(`======================================================================\n`);
     } else if (command === 'info' || command === 'status' || command === 'resume') {
       const slug = args[1];
       const handoff = await getProjectHandoff(slug);
