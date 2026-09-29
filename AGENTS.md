@@ -28,6 +28,11 @@ This file provides guidance to agents when working with code in this repository 
   npm test
   # or: node --test test/*.test.js
   ```
+- **Verify & Pre-Commit Audit Site**:
+  ```bash
+  node bin/cli.js verify <targetDir>
+  # Audits CSS fixed navbar, broken internal links, image alts, viewport, SEO, canonicals, robots.txt & sitemap.xml
+  ```
 - **Create New Website**:
   ```bash
   node bin/cli.js new ./sites/<site-dir> --name "<Site Name>" --desc "<Description>"
@@ -52,10 +57,12 @@ This file provides guidance to agents when working with code in this repository 
 │   │   └── inject-date.mjs     — UserPromptSubmit hook for date/time injection
 │   ├── rules/
 │   │   ├── css-fixed-navbar.md — Critical CSS rules for fixed navbar & flex body
-│   │   └── design-tokens.md    — Design token standards & theme conventions
+│   │   ├── design-tokens.md    — Design token standards & theme conventions
+│   │   └── html-standards.md   — Robust attribute parsing, discovery & verification rules
 │   ├── settings.json           — Bob settings and hook registrations
 │   └── skills/
 │       ├── retro/SKILL.md      — Session retrospective and lesson capture
+│       ├── verify-website/SKILL.md — Pre-commit audit & verification workflow
 │       └── website-builder/SKILL.md — Workflow instructions for site generation & redesign
 ├── bin/
 │   └── cli.js                  — Standalone CLI executable
@@ -81,6 +88,7 @@ This file provides guidance to agents when working with code in this repository 
 ## 🤖 Bob Skills & Capabilities
 
 - **`website-builder`**: Auto-activates when creating websites from scratch or inspecting/redesigning URLs. Must always follow the structured 3-part presentation format: (1) Analysis of the Original Site, (2) What Has Been Built (The Redesign), and (3) Hosting & Showcase Instructions.
+- **`verify-website`**: Auto-activates when running pre-commit QA audits, link checks, or responsive verification scans.
 - **`retro`**: Run when the user asks for `/retro`, "retrospective", or "what did we learn" to analyze session effectiveness and capture improvements into rules, skills, or `AGENTS.md`.
 
 ---

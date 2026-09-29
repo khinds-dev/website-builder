@@ -80,4 +80,9 @@ Whenever reviewing or redesigning an existing website, ALWAYS structure your out
    ```bash
    node bin/cli.js enhance <URL> ./sites/<redesigned-site> --name "<Site Name>"
    ```
-4. Review the generated HTML and refine the content, cards, and styling to make the site look polished, modern, and ultra-fast.
+4. Ensure `robots.txt` and `sitemap.xml` are populated and present at the root.
+5. Review the generated HTML and refine the content, cards, and styling to make the site look polished, modern, and ultra-fast.
+6. Run verification before delivery:
+   ```bash
+   node bin/cli.js verify ./sites/<redesigned-site>
+   ```
