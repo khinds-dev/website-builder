@@ -90,3 +90,5 @@ This file provides guidance to agents when working with code in this repository 
 1. **Minimal, surgical changes**: Follow minimal diff discipline. Avoid unnecessary refactors.
 2. **Accessible by default**: Ensure all forms have labels, images have meaningful `alt` attributes, interactive elements support keyboard navigation, and contrast meets WCAG AA standards.
 3. **Always verify with tests**: Run `npm test` after modifying core builder or analyzer logic before marking work complete.
+4. **Todo list discipline**: When using `update_todo_list`, always retain all previously completed `[x]` items verbatim.
+5. **Git hygiene**: Keep `.gitignore` updated and run tests before committing changes.
