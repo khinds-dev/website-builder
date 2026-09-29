@@ -1,0 +1,22 @@
+{
+  "name": "website-builder",
+  "version": "1.0.0",
+  "description": "Website builder and AI redesign toolkit inspired by clean, resilient vanilla web architecture.",
+  "main": "src/index.js",
+  "type": "module",
+  "bin": {
+    "site-builder": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "build": "node bin/cli.js"
+  },
+  "keywords": [
+    "website-builder",
+    "generator",
+    "redesign",
+    "bob-skill"
+  ],
+  "author": "Keith Hinds",
+  "license": "MIT"
+}
