@@ -73,16 +73,17 @@ Whenever reviewing or redesigning an existing website, ALWAYS structure your out
    node bin/cli.js analyze <URL>
    ```
    Or use the `web_fetch` tool to inspect the raw HTML.
-2. Present a concise diagnostic summary to the user:
+2. **Preserve Original External Links**: Always preserve original external links, social media URLs (Facebook, Instagram, WhatsApp, Twitter/X, TikTok, LinkedIn, YouTube), phone numbers, email addresses, and physical addresses exactly as discovered from the original website. Do not invent, alter, or rename external profile handles.
+3. Present a concise diagnostic summary to the user:
    - What's working well vs. what is suboptimal (SEO, accessibility, visual hierarchy, mobile readiness).
    - Proposed improvements.
-3. Generate the enhanced redesign:
+4. Generate the enhanced redesign:
    ```bash
    node bin/cli.js enhance <URL> ./sites/<redesigned-site> --name "<Site Name>"
    ```
-4. Ensure `robots.txt` and `sitemap.xml` are populated and present at the root.
-5. Review the generated HTML and refine the content, cards, and styling to make the site look polished, modern, and ultra-fast.
-6. Run verification before delivery:
+5. Ensure `robots.txt` and `sitemap.xml` are populated and present at the root.
+6. Review the generated HTML and refine the content, cards, and styling to make the site look polished, modern, and ultra-fast.
+7. Run verification before delivery:
    ```bash
    node bin/cli.js verify ./sites/<redesigned-site>
    ```
