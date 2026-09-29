@@ -34,6 +34,29 @@ This skill guides Bob through creating new websites or auditing, fetching, and r
 
 ---
 
+## 📑 Required Response Format for Every Redesign
+
+Whenever reviewing or redesigning an existing website, ALWAYS structure your output with these standard sections:
+
+### 1. Analysis of the Original Site
+- Crawl/fetch all available pages (Home, Services/Prices, About/Team, Contact, FAQs, etc.).
+- Detail specific issues:
+  - Framework bloat & performance bottlenecks (e.g. Wix, WordPress, heavy scripts)
+  - Broken URLs or messy slugs (e.g. duplicate pages, missing 404s)
+  - Buried critical information (e.g. opening times, pricing, walk-in vs appointment policies, payment methods)
+  - Mobile layout & readability deficiencies
+  - Visual hierarchy, typography, and contrast issues
+
+### 2. What Has Been Built (The Redesign)
+- Detail the chosen visual identity, color palette tokens, and typography.
+- Break down each generated page file by file (e.g. `index.html`, `price-list/`, `find-us/`, `team/`, `faq/`, `contact/`), explaining what was improved on each page.
+- Highlight zero-dependency performance, accessibility improvements, and responsive navigation.
+
+### 3. Hosting & Showcase Recommendations
+- Provide one-click / fast deployment recommendations (Cloudflare Pages or Netlify Drop) and local preview instructions.
+
+---
+
 ## 🚀 Execution Workflow
 
 ### A. When Creating a Website from Scratch

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | The Barbers At Number One Fair Oak</title>
+  <meta name="description" content="Contact The Barbers At Number One in Fair Oak. Phone: 07522 833060, WhatsApp community, Facebook, Instagram or send us a message online.">
+  <link rel="canonical" href="https://www.thebarbersatnumberone.com/contact/">
+  
+  <meta property="og:title" content="Contact Us | The Barbers At Number One">
+  <meta property="og:description" content="Get in touch via phone, WhatsApp, or our online form.">
+  <meta property="og:type" content="website">
+
+  <link rel="stylesheet" href="/css/shared.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="/" class="brand">
+        <span class="brand-badge">#1</span>
+        <div class="brand-text">
+          <span class="brand-name">The Barbers At Number One</span>
+          <span class="brand-sub">Fair Oak • Est. 2010</span>
+        </div>
+      </a>
+      <button class="hamburger" id="menuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Home</a></li>
+        <li><a href="/price-list/">Prices</a></li>
+        <li><a href="/find-us/">Find Us & Hours</a></li>
+        <li><a href="/team/">Team</a></li>
+        <li><a href="/products/">Products</a></li>
+        <li><a href="/faq/">FAQs</a></li>
+        <li><a href="/contact/" class="active" aria-current="page">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Get in Touch</h1>
+    <p class="lead">Have an enquiry? Reach out to Lisa and the team via WhatsApp, phone, or our online contact form.</p>
+
+    <div class="grid-2" style="margin-top: 2rem;">
+      <!-- Direct Contact Channels -->
+      <section class="card">
+        <h3>Direct Channels</h3>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--color-muted);">During busy cutting periods we may be with clients and unable to answer calls immediately. WhatsApp or voicemails are monitored throughout the day.</p>
+        
+        <div style="margin-top: 1.25rem; display: flex; flex-direction: column; gap: 0.85rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 1.25rem;">📱</span>
+            <div>
+              <strong style="display: block; font-size: 0.95rem;">WhatsApp / Mobile:</strong>
+              <a href="https://wa.me/447522833060" target="_blank" rel="noopener noreferrer" style="color: #25d366; font-weight: 600;">07522 833060</a>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 1.25rem;">💬</span>
+            <div>
+              <strong style="display: block; font-size: 0.95rem;">WhatsApp Group Community:</strong>
+              <a href="https://chat.whatsapp.com/HwWr54WxRVL1imflFNINXU" target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem;">Join Community Announcements &rarr;</a>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 1.25rem;">📍</span>
+            <div>
+              <strong style="display: block; font-size: 0.95rem;">Shop Location:</strong>
+              <span style="color: var(--color-muted); font-size: 0.9rem;">1 Botley Road, Fair Oak, SO50 7AN</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Form -->
+      <section class="card">
+        <h3>Send an Online Message</h3>
+        <form style="margin-top: 1rem;" onsubmit="event.preventDefault(); document.getElementById('formSuccess').style.display='block'; this.reset();">
+          <div style="margin-bottom: 1rem;">
+            <label for="cname" style="display:block; margin-bottom: 0.35rem; font-weight: 500; font-size: 0.9rem;">Your Name *</label>
+            <input id="cname" type="text" required placeholder="John Smith" style="width: 100%; padding: 0.6rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-bg); color: var(--color-text);">
+          </div>
+          
+          <div style="margin-bottom: 1rem;">
+            <label for="ccontact" style="display:block; margin-bottom: 0.35rem; font-weight: 500; font-size: 0.9rem;">Phone Number or Email *</label>
+            <input id="ccontact" type="text" required placeholder="07123 456789 or name@example.com" style="width: 100%; padding: 0.6rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-bg); color: var(--color-text);">
+          </div>
+
+          <div style="margin-bottom: 1.25rem;">
+            <label for="cmessage" style="display:block; margin-bottom: 0.35rem; font-weight: 500; font-size: 0.9rem;">Your Message / Question *</label>
+            <textarea id="cmessage" rows="4" required placeholder="How can we help?" style="width: 100%; padding: 0.6rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-bg); color: var(--color-text); font-family: inherit;"></textarea>
+          </div>
+
+          <button type="submit" class="btn" style="width: 100%;">Send Message</button>
+          
+          <div id="formSuccess" style="display: none; margin-top: 1rem; padding: 0.75rem; background: rgba(46, 160, 67, 0.15); border: 1px solid var(--color-green); color: var(--color-green); border-radius: var(--radius); font-size: 0.9rem; text-align: center;">
+            ✓ Thank you! Your message has been received. We will get back to you shortly.
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-nav">
+      <a href="/">Home</a>
+      <a href="/price-list/">Price List</a>
+      <a href="/find-us/">Find Us</a>
+      <a href="/team/">Team</a>
+      <a href="/products/">Products</a>
+      <a href="/faq/">FAQs</a>
+      <a href="/contact/">Contact</a>
+    </div>
+    <div class="social-links">
+      <a href="https://www.facebook.com/thebarbersatnumberone/" target="_blank" rel="noopener noreferrer" class="social-btn">Facebook</a>
+      <a href="https://www.instagram.com/thebarbersatnumberone/" target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
+      <a href="https://chat.whatsapp.com/HwWr54WxRVL1imflFNINXU" target="_blank" rel="noopener noreferrer" class="social-btn">WhatsApp Group</a>
+    </div>
+    <p>1 Botley Road, Fair Oak, Eastleigh, Hampshire, SO50 7AN • ☎ 07522 833060</p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem;">&copy; 2010 – 2026 The Barbers At Number One. All rights reserved.</p>
+  </footer>
+
+  <script src="/js/nav.js"></script>
+</body>
+</html>

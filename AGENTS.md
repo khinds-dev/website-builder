@@ -80,7 +80,7 @@ This file provides guidance to agents when working with code in this repository 
 
 ## 🤖 Bob Skills & Capabilities
 
-- **`website-builder`**: Auto-activates when creating websites from scratch or inspecting/redesigning URLs.
+- **`website-builder`**: Auto-activates when creating websites from scratch or inspecting/redesigning URLs. Must always follow the structured 3-part presentation format: (1) Analysis of the Original Site, (2) What Has Been Built (The Redesign), and (3) Hosting & Showcase Instructions.
 - **`retro`**: Run when the user asks for `/retro`, "retrospective", or "what did we learn" to analyze session effectiveness and capture improvements into rules, skills, or `AGENTS.md`.
 
 ---
