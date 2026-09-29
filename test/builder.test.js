@@ -1,7 +1,9 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
+import path from 'node:path';
 import { analyzeWebsite } from '../src/analyzer.js';
 import { renderPage, generateRedesignedSite } from '../src/templates.js';
+import { auditDirectory } from '../src/verifier.js';
 
 describe('Website Builder & Analyzer Tests', () => {
   const sampleHtml = `<!DOCTYPE html>
@@ -49,5 +51,15 @@ describe('Website Builder & Analyzer Tests', () => {
     assert.ok(redesigned.includes('Legacy Demo Reimagined'));
     assert.ok(redesigned.includes('class="card-grid"'));
     assert.ok(redesigned.includes('class="hero"'));
+  });
+
+  it('should run auditDirectory and verify the showcase website passes all checks', async () => {
+    const showcaseDir = path.resolve('./showcase/the-barbers-at-number-one');
+    const report = await auditDirectory(showcaseDir);
+    
+    assert.strictEqual(report.status, 'PASSED');
+    assert.strictEqual(report.totalIssues, 0);
+    assert.strictEqual(report.totalPages, 8);
+    assert.ok(report.cssRulesPassed.length >= 3);
   });
 });

@@ -4,7 +4,7 @@
  * CLI interface for website builder and enhancer
  */
 
-import { createWebsite, enhanceWebsite, analyzeWebsite, fetchSource } from '../src/index.js';
+import { createWebsite, enhanceWebsite, analyzeWebsite, fetchSource, auditDirectory } from '../src/index.js';
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -17,6 +17,7 @@ Usage:
   site-builder new <dir> [options]         Create a new website from scratch
   site-builder analyze <url|dir>           Analyze an existing website / page
   site-builder enhance <url|dir> <outDir>  Fetch, audit, and generate a redesigned version
+  site-builder verify <dir>                Run multi-page verification & QA audit on a directory
 
 Options:
   --name <site-name>      Name of the website
@@ -27,6 +28,7 @@ Examples:
   site-builder new ./my-new-site --name "Acme Studio"
   site-builder analyze https://example.com
   site-builder enhance https://example.com ./redesigned-example
+  site-builder verify ./showcase/the-barbers-at-number-one
 `);
 }
 
@@ -109,6 +111,40 @@ async function main() {
       console.log(`   - Enhanced typography & semantic HTML5`);
       console.log(`   - Shared design token system`);
       console.log(`   - Production docker & nginx configuration`);
+    } else if (command === 'verify' || command === 'audit') {
+      const targetDir = args[1] || '.';
+      console.log(`🔎 Auditing static website at ${targetDir}...`);
+      const report = await auditDirectory(targetDir);
+      
+      console.log(`\n📋 Audit Report (${report.totalPages} pages checked):`);
+      console.log(`Status: ${report.status === 'PASSED' ? '✅ ALL CHECKS PASSED' : '⚠️  ISSUES FOUND'}`);
+      
+      if (report.cssRulesPassed.length > 0) {
+        console.log('\n🎨 CSS Architecture:');
+        report.cssRulesPassed.forEach(p => console.log(`  ✓ ${p}`));
+      }
+      
+      if (report.cssIssues.length > 0) {
+        console.log('\n❌ CSS Issues:');
+        report.cssIssues.forEach(i => console.log(`  [${i.severity.toUpperCase()}] ${i.file}: ${i.message}`));
+      }
+
+      console.log('\n📄 Page Details:');
+      for (const page of report.pageResults) {
+        if (page.issues.length === 0) {
+          console.log(`  ✓ ${page.page} (${page.passes.length} checks passed)`);
+        } else {
+          console.log(`  ⚠️  ${page.page}:`);
+          page.issues.forEach(iss => console.log(`     - [${iss.severity.toUpperCase()}] (${iss.category}) ${iss.message}`));
+        }
+      }
+
+      if (report.totalIssues > 0) {
+        console.log(`\n❌ Total issues found: ${report.totalIssues}`);
+        process.exit(1);
+      } else {
+        console.log(`\n🎉 Site verified! Zero layout, link, SEO, or accessibility errors.`);
+      }
     } else {
       console.error(`Unknown command: ${command}`);
       printHelp();

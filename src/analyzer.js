@@ -62,9 +62,17 @@ export function analyzeWebsite(html, sourceUrl = '') {
   const title = titleMatch ? titleMatch[1].trim() : '';
 
   // Meta description
-  const descMatch = html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i) ||
-                    html.match(/<meta[^>]+content=["']([^"']*)["'][^>]+name=["']description["']/i);
-  const description = descMatch ? descMatch[1].trim() : '';
+  const metaTags = html.match(/<meta\b[^>]*>/gi) || [];
+  let description = '';
+  for (const tag of metaTags) {
+    if (/name=["']description["']/i.test(tag)) {
+      const m = tag.match(/content="([^"]*)"/i) || tag.match(/content='([^']*)'/i);
+      if (m) {
+        description = m[1].trim();
+        break;
+      }
+    }
+  }
 
   // Viewport
   const hasViewport = /<meta[^>]+name=["']viewport["']/i.test(html);
