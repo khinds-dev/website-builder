@@ -86,11 +86,17 @@ This file provides guidance to agents when working with code in this repository 
 │   ├── index.js                — Module exports
 │   └── templates.js            — Layout and component rendering helpers
 ├── templates/
-│   └── assets/
-│       ├── css/shared.css      — Shared design tokens, reset, navbar, card grid
-│       ├── js/nav.js           — Accessible hamburger toggle with ESC & outside-click support
-│       ├── Dockerfile          — Nginx Alpine production image
-│       └── nginx.conf          — Nginx clean URL routing & static caching
+│   ├── assets/                 — Generic base scaffold (used by CLI for every new project)
+│   │   ├── css/shared.css      — Neutral design tokens, reset, navbar, card grid
+│   │   ├── js/nav.js           — Accessible hamburger toggle with ESC & outside-click support
+│   │   ├── Dockerfile          — Nginx Alpine production image
+│   │   └── nginx.conf          — Nginx clean URL routing & static caching
+│   ├── themes/                 — Per-industry CSS token sets from completed showcase projects
+│   │   ├── indian-takeaway/    — Warm espresso/cream/red/gold (Touch of Spice)
+│   │   └── barbershop/         — Dark amber/slate palette (The Barbers at Number Two)
+│   ├── components/             — Drop-in interactive page templates
+│   │   └── order-page/         — Full dummy ordering experience (basket, checkout, confirmation)
+│   └── README.md               — Theme & component usage guide
 ├── test/
 │   └── builder.test.js         — Unit test suite
 ├── package.json
@@ -114,3 +120,11 @@ This file provides guidance to agents when working with code in this repository 
 3. **Always verify with tests**: Run `npm test` after modifying core builder or analyzer logic before marking work complete.
 4. **Todo list discipline**: When using `update_todo_list`, always retain all previously completed `[x]` items verbatim.
 5. **Git hygiene**: Keep `.gitignore` updated and run tests before committing changes.
+6. **Save themes & components after every project**: When a showcase project is completed, always copy its `css/shared.css` and `js/nav.js` into `templates/themes/<industry>/` and update `templates/README.md`. If the project introduced a reusable interactive component (e.g. order page, booking form, gallery), save it to `templates/components/<component-name>/`. This ensures the library grows with every project.
+
+   ```bash
+   # Example — after completing a new food/takeaway project:
+   cp projects/<slug>/css/shared.css templates/themes/<industry>/shared.css
+   cp projects/<slug>/js/nav.js templates/themes/<industry>/nav.js
+   # Then document it in templates/README.md
+   ```
