@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Online — Touch of Spice, Eastleigh</title>
+  <meta name="description" content="Order delivery or collection from Touch of Spice, Eastleigh. Browse our full Indian takeaway menu and place your order online.">
+  <meta name="theme-color" content="#1c1209">
+  <link rel="canonical" href="https://touchofspiceeastleigh.com/order/">
+  <link rel="stylesheet" href="/css/shared.css">
+  <style>
+    /* ── Order page layout ── */
+    .order-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 2rem;
+      align-items: start;
+      padding: 2rem 0 4rem;
+    }
+    @media (max-width: 900px) {
+      .order-layout { grid-template-columns: 1fr; }
+      .basket-col { order: -1; }
+    }
+
+    /* ── Category tabs ── */
+    .cat-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.75rem;
+    }
+    .cat-tab {
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--color-text);
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .cat-tab:hover { background: var(--color-gold-light); border-color: var(--color-gold); }
+    .cat-tab.active { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+
+    /* ── Menu sections ── */
+    .menu-section { display: none; }
+    .menu-section.visible { display: block; }
+    .menu-section h2 {
+      font-size: 1.25rem;
+      margin-bottom: 0.25rem;
+      color: var(--color-text);
+    }
+    .menu-section .section-desc {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      margin-bottom: 1.25rem;
+      font-style: italic;
+    }
+
+    /* ── Menu item rows ── */
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--color-border);
+      gap: 1rem;
+    }
+    .order-item:last-child { border-bottom: none; }
+    .order-item__info { flex: 1; min-width: 0; }
+    .order-item__name { font-weight: 600; font-size: 0.95rem; }
+    .order-item__desc { font-size: 0.78rem; color: var(--color-muted); margin-top: 0.15rem; }
+    .order-item__badges { margin-top: 0.2rem; display: flex; gap: 0.3rem; flex-wrap: wrap; }
+    .order-item__right { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
+    .order-item__price { font-weight: 700; color: var(--color-accent); font-size: 0.95rem; white-space: nowrap; }
+    .add-btn {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      color: #fff;
+      border: none;
+      font-size: 1.3rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .add-btn:hover { background: var(--color-accent-dark); transform: scale(1.1); }
+    .add-btn:active { transform: scale(0.95); }
+
+    /* ── Basket ── */
+    .basket {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      position: sticky;
+      top: calc(var(--nav-height) + 1rem);
+    }
+    .basket__header {
+      background: var(--color-nav-bg);
+      color: #f5ece0;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius) var(--radius) 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .basket__header h2 { font-size: 1rem; color: #fff; margin: 0; font-family: var(--font-body); font-weight: 700; }
+    .basket__count {
+      background: var(--color-accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.55rem;
+      border-radius: 10px;
+    }
+    .basket__type-toggle {
+      display: flex;
+      gap: 0;
+      margin: 1rem 1.25rem 0;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .type-btn {
+      flex: 1;
+      padding: 0.5rem;
+      border: none;
+      background: var(--color-bg);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--color-muted);
+      transition: background 0.15s, color 0.15s;
+    }
+    .type-btn.active { background: var(--color-gold); color: #1c1209; }
+
+    .basket__items { padding: 0.75rem 1.25rem; min-height: 80px; }
+    .basket-empty { text-align: center; color: var(--color-muted); font-size: 0.875rem; padding: 1.5rem 0; }
+    .basket-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--color-border);
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+    .basket-line:last-child { border-bottom: none; }
+    .basket-line__name { flex: 1; font-weight: 500; }
+    .basket-line__qty-ctrl { display: flex; align-items: center; gap: 0.35rem; }
+    .qty-btn {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      line-height: 1;
+      color: var(--color-text);
+      transition: background 0.1s;
+    }
+    .qty-btn:hover { background: var(--color-gold-light); }
+    .basket-line__qty { font-size: 0.8rem; font-weight: 700; min-width: 16px; text-align: center; }
+    .basket-line__price { font-weight: 700; color: var(--color-accent); white-space: nowrap; }
+
+    .basket__footer { padding: 1rem 1.25rem; border-top: 1px solid var(--color-border); }
+    .basket__totals { margin-bottom: 1rem; }
+    .basket__totals div { display: flex; justify-content: space-between; font-size: 0.875rem; padding: 0.2rem 0; }
+    .basket__totals .grand { font-weight: 700; font-size: 1rem; border-top: 1px solid var(--color-border); padding-top: 0.5rem; margin-top: 0.25rem; }
+    .checkout-btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--color-accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .checkout-btn:hover { background: var(--color-accent-dark); }
+    .checkout-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* ── Confirmation overlay ── */
+    .confirm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(28,18,9,0.75);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .confirm-overlay.show { display: flex; }
+    .confirm-box {
+      background: var(--color-bg);
+      border-radius: 12px;
+      padding: 2.5rem;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .confirm-box__icon { font-size: 3.5rem; margin-bottom: 0.75rem; }
+    .confirm-box h2 { font-size: 1.6rem; margin-bottom: 0.5rem; }
+    .confirm-box p { color: var(--color-muted); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .confirm-box__ref {
+      background: var(--color-gold-light);
+      border: 1px solid var(--color-gold);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--color-gold);
+      margin: 1rem 0;
+    }
+    .confirm-box__summary {
+      text-align: left;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      margin-bottom: 1.25rem;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+    .confirm-box__summary div { display: flex; justify-content: space-between; padding: 0.2rem 0; border-bottom: 1px solid var(--color-border); }
+    .confirm-box__summary div:last-child { border-bottom: none; font-weight: 700; }
+    .confirm-close {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--color-accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    .confirm-close:hover { background: var(--color-accent-dark); }
+
+    /* ── Details form ── */
+    .details-form { display: none; padding: 1rem 1.25rem; border-top: 1px solid var(--color-border); }
+    .details-form.show { display: block; }
+    .form-row { margin-bottom: 0.85rem; }
+    .form-row label { display: block; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-muted); margin-bottom: 0.3rem; }
+    .form-row input, .form-row textarea {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-size: 0.9rem;
+      font-family: var(--font-body);
+    }
+    .form-row input:focus, .form-row textarea:focus {
+      outline: 2px solid var(--color-gold);
+      border-color: var(--color-gold);
+    }
+    .form-row textarea { resize: vertical; min-height: 56px; }
+  </style>
+</head>
+<body>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="/" class="navbar__brand">Touch of <span>Spice</span></a>
+    <button class="navbar__hamburger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="navbar__links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/menu/">Full Menu</a></li>
+      <li><a href="/find-us/">Find Us</a></li>
+      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/order/" class="navbar__cta">Order Online</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <h1>Order Online</h1>
+        <p>Delivery &amp; collection · Open Mon–Wed &amp; Fri–Sun from 5pm · <a href="tel:+442380695088" style="color:var(--color-gold);">023 8069 5088</a></p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="order-layout">
+
+        <!-- LEFT: menu browser -->
+        <div class="menu-col">
+
+          <!-- Category tabs -->
+          <nav class="cat-tabs" aria-label="Menu categories" id="catTabs"></nav>
+
+          <!-- Menu sections injected by JS -->
+          <div id="menuSections"></div>
+
+        </div>
+
+        <!-- RIGHT: basket -->
+        <div class="basket-col">
+          <div class="basket">
+            <div class="basket__header">
+              <h2>🛒 Your Order</h2>
+              <span class="basket__count" id="basketCount">0 items</span>
+            </div>
+            <div class="basket__type-toggle">
+              <button class="type-btn active" id="btnDelivery" onclick="setType('delivery')">🚗 Delivery</button>
+              <button class="type-btn" id="btnCollection" onclick="setType('collection')">🏃 Collection</button>
+            </div>
+            <div class="basket__items" id="basketItems">
+              <div class="basket-empty" id="basketEmpty">Your basket is empty.<br>Add items from the menu.</div>
+            </div>
+            <div class="basket__footer" id="basketFooter" style="display:none;">
+              <div class="basket__totals">
+                <div><span>Subtotal</span><span id="subtotal">£0.00</span></div>
+                <div id="deliveryRow"><span>Delivery</span><span id="deliveryFee">Free</span></div>
+                <div class="grand"><span>Total</span><span id="total">£0.00</span></div>
+              </div>
+              <button class="checkout-btn" id="checkoutBtn" onclick="showDetails()">Enter Details →</button>
+            </div>
+
+            <!-- Details form (shown after clicking checkout) -->
+            <div class="details-form" id="detailsForm">
+              <div class="form-row">
+                <label for="custName">Your Name</label>
+                <input type="text" id="custName" placeholder="e.g. John Smith" autocomplete="name">
+              </div>
+              <div class="form-row">
+                <label for="custPhone">Phone Number</label>
+                <input type="tel" id="custPhone" placeholder="e.g. 07700 900 000" autocomplete="tel">
+              </div>
+              <div id="addressRow" class="form-row">
+                <label for="custAddress">Delivery Address</label>
+                <textarea id="custAddress" placeholder="House number, street, postcode" rows="2"></textarea>
+              </div>
+              <div class="form-row">
+                <label for="custNotes">Special Instructions (optional)</label>
+                <input type="text" id="custNotes" placeholder="e.g. no onions, extra spicy">
+              </div>
+              <button class="checkout-btn" onclick="placeOrder()">Place Order</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Confirmation overlay -->
+  <div class="confirm-overlay" id="confirmOverlay" role="dialog" aria-modal="true" aria-label="Order confirmation">
+    <div class="confirm-box">
+      <div class="confirm-box__icon">🎉</div>
+      <h2>Order Received!</h2>
+      <p>Thank you, <strong id="confirmName"></strong>. We've got your order.</p>
+      <div class="confirm-box__ref" id="confirmRef"></div>
+      <p style="font-size:0.82rem;">Estimated time: <strong id="confirmTime"></strong></p>
+      <div class="confirm-box__summary" id="confirmSummary"></div>
+      <p style="font-size:0.8rem;color:var(--color-muted);margin-top:0.5rem;">We'll call you on <strong id="confirmPhone"></strong> when your order is ready.</p>
+      <button class="confirm-close" onclick="closeConfirm()">Back to Menu</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand">Touch of <span>Spice</span></div>
+        <div class="footer__links">
+          <a href="/">Home</a>
+          <a href="/menu/">Menu</a>
+          <a href="/find-us/">Find Us</a>
+          <a href="/contact/">Contact</a>
+        </div>
+        <div class="footer__copy">
+          172 Fair Oak Rd, Eastleigh SO50 8HA &nbsp;·&nbsp; <a href="tel:+442380695088" style="color:inherit;">023 8069 5088</a> &nbsp;·&nbsp; &copy; 2026 Touch of Spice
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/nav.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    // ── Menu data ──────────────────────────────────────────────────────────
+    var MENU = [
+      { id: 'popular', label: '❤️ Popular', desc: null, items: [
+        { n: 'Chicken Tikka Masala', p: 6.95, badges: ['popular'] },
+        { n: 'Chicken Madras', p: 6.95, badges: ['hot','popular'] },
+        { n: 'Makhani Chicken', d: 'Butter, fresh cream & homemade spices', p: 7.50, badges: ['popular'] },
+        { n: 'Lamb Rogan Josh', d: 'Tomatoes, fried onions, medium hot', p: 8.50, badges: ['spicy','popular'] },
+        { n: 'Chicken Tikka Pasanda', d: 'Almonds, sultanas, cream & butter', p: 7.95, badges: ['popular'] },
+        { n: 'Chicken Biryani', d: 'Sultanas & almonds, served with veg curry', p: 8.50, badges: ['popular'] },
+        { n: 'Onion Bhaji', p: 2.95, badges: ['popular'] },
+        { n: 'Garlic Naan', p: 3.50, badges: ['popular'] },
+        { n: 'Pilau Rice', p: 2.95, badges: ['popular'] },
+        { n: 'Chicken Korma', p: 6.95, badges: ['popular'] },
+      ]},
+      { id: 'starters', label: '🍢 Starters', desc: null, items: [
+        { n: 'Onion Bhaji', p: 2.95, badges: ['popular'] },
+        { n: 'Veg / Chicken Pakora', p: 3.50 },
+        { n: 'Veg / Chicken / Meat Samosa', p: 3.50 },
+        { n: 'Sheek / Shami / Mixed Kebab', p: 3.95 },
+        { n: 'Indian Kebab', p: 5.50 },
+        { n: 'Tandoori Chicken', p: 3.95 },
+        { n: 'Chicken / Lamb Tikka', p: 3.95 },
+        { n: 'Chicken Chat', p: 3.95 },
+        { n: 'Prawn / King Prawn Puri', p: 3.95 },
+        { n: 'King Prawn Butterfly', p: 5.95 },
+        { n: 'Tandoori King Prawns', p: 5.95 },
+        { n: 'Garlic Fried King Prawns', p: 5.95 },
+        { n: 'Mixed Platter', d: 'Serves two', p: 7.50 },
+        { n: 'Tandoori Platter', d: 'Serves two', p: 7.50 },
+        { n: 'Garlic Fried Mushrooms', p: 3.50 },
+        { n: 'Chicken Tikka Special', p: 4.95 },
+      ]},
+      { id: 'tandoori', label: '🔥 Tandoori', desc: null, items: [
+        { n: 'Chicken Tikka', p: 7.50 },
+        { n: 'Lamb Tikka', p: 7.95 },
+        { n: 'Tandoori Chicken (Half)', d: 'Slow cooked on the bone, yoghurt & spices', p: 7.50 },
+        { n: 'Chicken Shashlik', p: 7.95 },
+        { n: 'Lamb Shashlik', p: 7.95 },
+        { n: 'Tandoori Mixed Grill', p: 9.95 },
+        { n: 'Lamb Chop', d: 'On the bone', p: 8.95 },
+        { n: 'Platter Butty', d: 'Sheek kebab, shami kebab & lamb tikka', p: 7.50 },
+      ]},
+      { id: 'specials', label: '⭐ House Specials', desc: null, items: [
+        { n: 'Makhani Chicken / Lamb', d: 'Butter, fresh cream & homemade spices', p: 7.50, badges: ['popular'] },
+        { n: 'Garlic Chilli Chicken / Lamb', p: 7.50 },
+        { n: 'Shahi Chicken / Lamb Tikka', d: 'Thick sauce with coconut', p: 7.50 },
+        { n: 'Jeera Chicken / Lamb', d: 'Medium hot, cumin & homemade spices', p: 7.50, badges: ['spicy'] },
+        { n: 'Methi Chicken / Lamb', d: 'Medium hot, fenugreek & homemade spices', p: 7.50, badges: ['spicy'] },
+        { n: 'Achar Chicken / Lamb Tikka', d: 'Mixed sweet and sour pickles', p: 7.50 },
+        { n: 'Sally Boti Chicken / Lamb', d: 'Tomatoes, onions, fresh herbs, potato straws', p: 7.50 },
+        { n: 'Ceylon Chicken / Lamb', d: 'Coconut & spices, Sri Lankan style', p: 7.50 },
+        { n: 'Malayan Chicken / Lamb', d: 'Medium hot, cooked with pineapple', p: 7.50, badges: ['spicy'] },
+        { n: 'Kashmir Chicken', d: 'Mild curry with lychees and banana', p: 7.50, badges: ['mild'] },
+        { n: 'Bombay Chicken', d: 'Medium hot, contains a boiled egg', p: 7.50, badges: ['spicy'] },
+        { n: 'Nawabi Chicken', d: 'Hot dish in a homemade sauce', p: 7.50, badges: ['hot'] },
+        { n: 'Kochi Chilli Chicken', d: 'Chicken tikka with green chillies', p: 7.50 },
+        { n: 'Naga Chicken / Lamb', d: 'Buna style, naga chilli & pickle', p: 7.50, badges: ['hot'] },
+        { n: 'Butter Chicken in Cashew Nut Sauce', d: 'Butter, cream & cashew nut sauce', p: 7.50, badges: ['mild'] },
+        { n: 'Jhinga Changa', d: 'King prawns in shell, garlic & onions', p: 7.50, badges: ['spicy'] },
+        { n: 'Chilli Chicken / Lamb', p: 8.50 },
+        { n: 'Modhu Chicken / Lamb', p: 8.50 },
+      ]},
+      { id: 'korma', label: '🥛 Korma', desc: 'A mild spiced rich and creamy sauce', items: [
+        { n: 'Chicken Korma', p: 6.95, badges: ['popular','mild'] },
+        { n: 'Lamb Korma', p: 7.50, badges: ['mild'] },
+        { n: 'Prawn Korma', p: 8.95, badges: ['mild'] },
+        { n: 'King Prawn Korma', p: 10.95, badges: ['mild'] },
+        { n: 'Vegetable Korma', p: 6.50, badges: ['veg','mild'] },
+        { n: 'Mushroom Korma', p: 6.50, badges: ['veg','mild'] },
+      ]},
+      { id: 'masala', label: '🍅 Masala', desc: 'Marinated in homemade spices, charcoal tandoor, finished in masala & cashew nut sauce', items: [
+        { n: 'Chicken Tikka Masala', p: 6.95, badges: ['popular'] },
+        { n: 'Lamb Tikka Masala', p: 7.50 },
+        { n: 'Tandoori Chicken Masala', p: 7.50 },
+        { n: 'Chicken Chilli Masala', p: 7.95, badges: ['spicy'] },
+        { n: 'Lamb Chilli Masala', p: 8.50, badges: ['spicy'] },
+        { n: 'Prawn Masala', p: 8.95 },
+        { n: 'King Prawn Masala', p: 10.50 },
+        { n: 'Tandoori King Prawn Masala', p: 10.95 },
+        { n: 'Vegetable Masala', p: 6.50, badges: ['veg'] },
+      ]},
+      { id: 'pasanda', label: '🍯 Pasanda', desc: 'Cooked with almonds, sultanas, cream and butter', items: [
+        { n: 'Chicken Tikka Pasanda', p: 7.95, badges: ['popular','mild'] },
+        { n: 'Lamb Tikka Pasanda', p: 8.50, badges: ['mild'] },
+        { n: 'Prawn Pasanda', p: 8.95, badges: ['mild'] },
+        { n: 'King Prawn Pasanda', p: 10.95, badges: ['mild'] },
+        { n: 'Vegetable Pasanda', p: 6.95, badges: ['veg','mild'] },
+      ]},
+      { id: 'balti', label: '🫕 Balti', desc: null, items: [
+        { n: 'Chicken Special Balti', p: 6.95 },
+        { n: 'Lamb Special Balti', p: 7.50 },
+        { n: 'Tandoori Chicken Balti', p: 7.50 },
+        { n: 'Kochi Chilli Chicken Balti', p: 7.50, badges: ['hot'] },
+        { n: 'Methi Lamb Balti', p: 8.50, badges: ['spicy'] },
+        { n: 'Prawn Special Balti', p: 8.50 },
+        { n: 'King Prawn Special Balti', p: 11.50 },
+        { n: 'Vegetable Balti', p: 5.95, badges: ['veg'] },
+        { n: 'Mixed Special Balti', p: 8.50 },
+      ]},
+      { id: 'curry', label: '🍛 Curry / Bhuna / Madras', desc: null, items: [
+        { n: 'Chicken Curry', p: 7.95 },
+        { n: 'Lamb Curry', p: 8.50 },
+        { n: 'Prawn Curry', p: 8.95 },
+        { n: 'King Prawn Curry', p: 10.95 },
+        { n: 'Vegetable Curry', p: 6.95, badges: ['veg'] },
+        { n: 'Chicken Madras', p: 6.95, badges: ['hot','popular'] },
+        { n: 'Lamb Madras', p: 7.50, badges: ['hot'] },
+        { n: 'Prawn Madras', p: 8.50, badges: ['hot'] },
+        { n: 'King Prawn Madras', p: 10.50, badges: ['hot'] },
+        { n: 'Chicken Bhuna', p: 6.95, badges: ['spicy'] },
+        { n: 'Lamb Bhuna', p: 7.50, badges: ['spicy'] },
+        { n: 'Prawn Bhuna', p: 7.95, badges: ['spicy'] },
+        { n: 'King Prawn Bhuna', p: 9.95, badges: ['spicy'] },
+        { n: 'Vegetable Bhuna', p: 6.50, badges: ['veg','spicy'] },
+        { n: 'Chicken Rogan Josh', p: 7.95, badges: ['spicy'] },
+        { n: 'Lamb Rogan Josh', p: 8.50, badges: ['spicy','popular'] },
+        { n: 'Prawn Rogan Josh', p: 8.95, badges: ['spicy'] },
+        { n: 'King Prawn Rogan Josh', p: 10.95, badges: ['spicy'] },
+      ]},
+      { id: 'jalfrezi', label: '🌿 Jalfrezi / Korai / Dupiaza', desc: 'Fresh garlic, ginger, green chillies & coriander', items: [
+        { n: 'Chicken Jalfrezi', p: 6.95 },
+        { n: 'Lamb Jalfrezi', p: 7.50 },
+        { n: 'Prawn Jalfrezi', p: 8.95 },
+        { n: 'King Prawn Jalfrezi', p: 10.50 },
+        { n: 'Vegetable Jalfrezi', p: 6.50, badges: ['veg'] },
+        { n: 'Chicken Korai', p: 6.95 },
+        { n: 'Lamb Korai', p: 7.50 },
+        { n: 'King Prawn Korai', p: 10.50 },
+        { n: 'Vegetable Korai', p: 6.50, badges: ['veg'] },
+        { n: 'Chicken Dupiaza', p: 6.50 },
+        { n: 'Lamb Dupiaza', p: 7.50 },
+        { n: 'King Prawn Dupiaza', p: 10.50 },
+      ]},
+      { id: 'dansak', label: '🍋 Dansak / Pathia / Vindaloo', desc: null, items: [
+        { n: 'Chicken Dansak', p: 6.95, badges: ['spicy'] },
+        { n: 'Lamb Dansak', p: 7.50, badges: ['spicy'] },
+        { n: 'King Prawn Dansak', p: 9.50, badges: ['spicy'] },
+        { n: 'Chicken Pathia', p: 6.95, badges: ['hot'] },
+        { n: 'Lamb Pathia', p: 7.50, badges: ['hot'] },
+        { n: 'King Prawn Pathia', p: 9.50, badges: ['hot'] },
+        { n: 'Chicken Vindaloo', p: 7.95, badges: ['hot'] },
+        { n: 'Lamb Vindaloo', p: 8.50, badges: ['hot'] },
+        { n: 'Prawn Vindaloo', p: 8.95, badges: ['hot'] },
+        { n: 'King Prawn Vindaloo', p: 10.95, badges: ['hot'] },
+        { n: 'Vegetable Vindaloo', p: 6.95, badges: ['veg','hot'] },
+      ]},
+      { id: 'saag', label: '🌿 Saag', desc: 'Medium, cooked with spinach & homemade spices', items: [
+        { n: 'Chicken Saag', p: 7.50 },
+        { n: 'Lamb Saag', p: 7.95 },
+        { n: 'Prawn Saag', p: 8.50 },
+        { n: 'King Prawn Saag', p: 10.50 },
+      ]},
+      { id: 'biryani', label: '🍚 Biryani', desc: 'Rice with sultanas & almonds, served with vegetable curry', items: [
+        { n: 'Chicken Biryani', p: 8.50, badges: ['popular'] },
+        { n: 'Lamb Biryani', p: 8.95 },
+        { n: 'Chicken Tikka Biryani', p: 9.50 },
+        { n: 'Prawn Biryani', p: 9.50 },
+        { n: 'King Prawn Biryani', p: 11.50 },
+        { n: 'Vegetable Biryani', p: 7.95, badges: ['veg'] },
+        { n: 'Mushroom Biryani', p: 7.95, badges: ['veg'] },
+        { n: 'Spiced Mixed Biryani', p: 8.50 },
+      ]},
+      { id: 'fish', label: '🐟 Fish', desc: 'Cod or ayre — a Bangladeshi fish with sweet, meaty, flaky texture', items: [
+        { n: 'Fish Bhuna', p: 8.95 },
+        { n: 'Fish Dupiaza', p: 8.95 },
+        { n: 'Fish Jalfrezi', p: 8.95 },
+      ]},
+      { id: 'sides', label: '🥗 Sides', desc: null, items: [
+        { n: 'Bombay Aloo', p: 3.50, badges: ['veg'] },
+        { n: 'Tarka Dal', p: 3.50, badges: ['veg'] },
+        { n: 'Bhindi Bhaji', p: 3.50, badges: ['veg'] },
+        { n: 'Mushroom Bhaji', p: 3.50, badges: ['veg'] },
+        { n: 'Saag Bhaji', p: 3.50, badges: ['veg'] },
+        { n: 'Saag Aloo', p: 3.50, badges: ['veg'] },
+        { n: 'Aloo Gobi', p: 3.50, badges: ['veg'] },
+        { n: 'Chana Bhaji', p: 3.50, badges: ['veg'] },
+        { n: 'Saag Paneer', p: 3.50, badges: ['veg'] },
+        { n: 'Chips', p: 3.50 },
+        { n: 'Curry Sauce', p: 3.50 },
+        { n: 'Korma Sauce', p: 3.50 },
+        { n: 'Masala Sauce', p: 3.50 },
+      ]},
+      { id: 'rice', label: '🫓 Rice & Bread', desc: null, items: [
+        { n: 'Boiled Rice', p: 2.50, badges: ['veg'] },
+        { n: 'Pilau Rice', p: 2.95, badges: ['veg','popular'] },
+        { n: 'Mushroom Rice', p: 3.95, badges: ['veg'] },
+        { n: 'Garlic Fried Rice', p: 3.50, badges: ['veg'] },
+        { n: 'Egg Fried Rice', p: 3.50 },
+        { n: 'Chicken Fried Rice', p: 3.95 },
+        { n: 'Plain Naan', p: 2.50, badges: ['veg'] },
+        { n: 'Garlic Naan', p: 3.50, badges: ['veg','popular'] },
+        { n: 'Keema Naan', p: 3.95 },
+        { n: 'Peshwari Naan', p: 3.50, badges: ['veg'] },
+        { n: 'Chilli Naan', p: 3.50, badges: ['veg'] },
+        { n: 'Cheese Naan', p: 3.50, badges: ['veg'] },
+        { n: 'Lehori Naan', d: 'Chicken & cheese', p: 3.95 },
+        { n: 'Shahi Naan', d: 'Keema aloo, chilli, coriander, cheese & chicken', p: 3.95 },
+        { n: 'Plain Paratha', p: 1.95, badges: ['veg'] },
+        { n: 'Chapati', p: 1.95, badges: ['veg'] },
+        { n: 'Tandoori Roti', p: 1.95, badges: ['veg'] },
+      ]},
+      { id: 'extras', label: '🫙 Extras & Drinks', desc: null, items: [
+        { n: 'Popadoms', p: 0.50, badges: ['veg'] },
+        { n: 'Masala Popadoms', p: 0.50, badges: ['veg'] },
+        { n: 'Onion Salad', p: 0.50, badges: ['veg'] },
+        { n: 'Cucumber Riata', p: 1.50, badges: ['veg'] },
+        { n: '330ml Can', p: 1.50 },
+        { n: '1.5l Bottle', p: 3.50 },
+      ]},
+      { id: 'setmeals', label: '🎁 Set Meals', desc: 'Great value curated feasts', items: [
+        { n: 'Vegetarian Set — For One', d: 'Onion bhaji, veg curry, mushroom bhaji, pilau rice, naan & popadom', p: 16.95, badges: ['veg'] },
+        { n: 'Set Meal — For One', d: 'Chicken tikka, chicken korai, veg curry, pilau rice, naan & popadom', p: 18.95 },
+        { n: 'Set Meal — For Two', d: 'Onion bhaji, chicken tikka, chicken rogan, lamb bhuna, bombay aloo, 2 rice, 1 naan & 2 popadoms', p: 32.95 },
+        { n: 'Tandoori Set — For Two', d: 'Shami kebab, chicken tikka, half tandoori chicken, lamb tikka, veg curry, 1 rice, 1 naan & 2 popadoms', p: 32.95 },
+        { n: 'Set Meal — For Four', d: '2x chicken tikka, onion bhaji, lamb tikka, chicken jalfrezi, balti chicken, meat curry, CTM, bombay aloo, 4 rice, 2 naans & 4 popadoms', p: 59.95 },
+      ]},
+    ];
+
+    var BADGE_LABELS = { hot: '🌶 Hot', spicy: '🌶 Spicy', mild: 'Mild', veg: '🥬 Veg', popular: '★ Popular' };
+    var BADGE_CLASSES = { hot: 'badge-hot', spicy: 'badge-spicy', mild: 'badge-mild', veg: 'badge-veg', popular: 'badge-popular' };
+
+    // ── State ──────────────────────────────────────────────────────────────
+    var basket = {};   // { itemKey: { n, p, qty } }
+    var orderType = 'delivery';
+    var activeSection = 'popular';
+
+    // ── Render tabs + sections ─────────────────────────────────────────────
+    function renderMenu() {
+      var tabsEl = document.getElementById('catTabs');
+      var sectEl = document.getElementById('menuSections');
+      tabsEl.innerHTML = '';
+      sectEl.innerHTML = '';
+
+      MENU.forEach(function (cat) {
+        // Tab
+        var tab = document.createElement('button');
+        tab.className = 'cat-tab' + (cat.id === activeSection ? ' active' : '');
+        tab.textContent = cat.label;
+        tab.setAttribute('data-section', cat.id);
+        tab.addEventListener('click', function () { setSection(cat.id); });
+        tabsEl.appendChild(tab);
+
+        // Section
+        var sec = document.createElement('div');
+        sec.className = 'menu-section' + (cat.id === activeSection ? ' visible' : '');
+        sec.id = 'sec-' + cat.id;
+
+        var html = '<h2>' + cat.label + '</h2>';
+        if (cat.desc) html += '<p class="section-desc">' + cat.desc + '</p>';
+
+        cat.items.forEach(function (item) {
+          var key = item.n;
+          var badgeHtml = '';
+          if (item.badges) {
+            item.badges.forEach(function (b) {
+              badgeHtml += '<span class="item-badge ' + (BADGE_CLASSES[b] || '') + '">' + (BADGE_LABELS[b] || b) + '</span>';
+            });
+          }
+          html += '<div class="order-item">' +
+            '<div class="order-item__info">' +
+              '<div class="order-item__name">' + item.n + '</div>' +
+              (item.d ? '<div class="order-item__desc">' + item.d + '</div>' : '') +
+              (badgeHtml ? '<div class="order-item__badges">' + badgeHtml + '</div>' : '') +
+            '</div>' +
+            '<div class="order-item__right">' +
+              '<span class="order-item__price">£' + item.p.toFixed(2) + '</span>' +
+              '<button class="add-btn" aria-label="Add ' + item.n + ' to order" data-key="' + key + '" data-name="' + item.n + '" data-price="' + item.p + '">+</button>' +
+            '</div>' +
+          '</div>';
+        });
+
+        sec.innerHTML = html;
+        sectEl.appendChild(sec);
+      });
+
+      // Attach add-btn listeners
+      document.querySelectorAll('.add-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          addItem(btn.getAttribute('data-key'), btn.getAttribute('data-name'), parseFloat(btn.getAttribute('data-price')));
+        });
+      });
+    }
+
+    function setSection(id) {
+      activeSection = id;
+      document.querySelectorAll('.cat-tab').forEach(function (t) {
+        t.classList.toggle('active', t.getAttribute('data-section') === id);
+      });
+      document.querySelectorAll('.menu-section').forEach(function (s) {
+        s.classList.toggle('visible', s.id === 'sec-' + id);
+      });
+    }
+
+    // ── Basket logic ───────────────────────────────────────────────────────
+    function addItem(key, name, price) {
+      if (basket[key]) {
+        basket[key].qty++;
+      } else {
+        basket[key] = { n: name, p: price, qty: 1 };
+      }
+      renderBasket();
+      // Brief pulse animation on basket header
+      var hdr = document.querySelector('.basket__header');
+      hdr.style.background = '#962d23';
+      setTimeout(function () { hdr.style.background = ''; }, 200);
+    }
+
+    function changeQty(key, delta) {
+      if (!basket[key]) return;
+      basket[key].qty += delta;
+      if (basket[key].qty <= 0) delete basket[key];
+      renderBasket();
+    }
+
+    function renderBasket() {
+      var keys = Object.keys(basket);
+      var itemsEl = document.getElementById('basketItems');
+      var footerEl = document.getElementById('basketFooter');
+      var emptyEl = document.getElementById('basketEmpty');
+      var countEl = document.getElementById('basketCount');
+
+      var totalQty = keys.reduce(function (s, k) { return s + basket[k].qty; }, 0);
+      countEl.textContent = totalQty + (totalQty === 1 ? ' item' : ' items');
+
+      if (keys.length === 0) {
+        itemsEl.innerHTML = '';
+        itemsEl.appendChild(emptyEl || Object.assign(document.createElement('div'), { className: 'basket-empty', innerHTML: 'Your basket is empty.<br>Add items from the menu.' }));
+        footerEl.style.display = 'none';
+        document.getElementById('detailsForm').classList.remove('show');
+        document.getElementById('checkoutBtn').style.display = 'block';
+        return;
+      }
+
+      var html = '';
+      var subtotal = 0;
+      keys.forEach(function (k) {
+        var item = basket[k];
+        subtotal += item.p * item.qty;
+        html += '<div class="basket-line">' +
+          '<span class="basket-line__name">' + item.n + '</span>' +
+          '<div class="basket-line__qty-ctrl">' +
+            '<button class="qty-btn" data-key="' + k + '" data-delta="-1" aria-label="Remove one">−</button>' +
+            '<span class="basket-line__qty">' + item.qty + '</span>' +
+            '<button class="qty-btn" data-key="' + k + '" data-delta="1" aria-label="Add one">+</button>' +
+          '</div>' +
+          '<span class="basket-line__price">£' + (item.p * item.qty).toFixed(2) + '</span>' +
+        '</div>';
+      });
+
+      itemsEl.innerHTML = html;
+      footerEl.style.display = 'block';
+
+      // Qty buttons
+      itemsEl.querySelectorAll('.qty-btn').forEach(function (b) {
+        b.addEventListener('click', function () { changeQty(b.getAttribute('data-key'), parseInt(b.getAttribute('data-delta'))); });
+      });
+
+      var delivery = (orderType === 'delivery' && subtotal < 15) ? 1.50 : 0;
+      var total = subtotal + delivery;
+
+      document.getElementById('subtotal').textContent = '£' + subtotal.toFixed(2);
+      document.getElementById('deliveryFee').textContent = delivery === 0 ? 'Free' : '£' + delivery.toFixed(2);
+      document.getElementById('total').textContent = '£' + total.toFixed(2);
+      document.getElementById('deliveryRow').style.display = orderType === 'delivery' ? '' : 'none';
+    }
+
+    function setType(type) {
+      orderType = type;
+      document.getElementById('btnDelivery').classList.toggle('active', type === 'delivery');
+      document.getElementById('btnCollection').classList.toggle('active', type === 'collection');
+      document.getElementById('deliveryRow').style.display = type === 'delivery' ? '' : 'none';
+      document.getElementById('addressRow').style.display = type === 'delivery' ? '' : 'none';
+      renderBasket();
+    }
+
+    function showDetails() {
+      var form = document.getElementById('detailsForm');
+      form.classList.add('show');
+      document.getElementById('checkoutBtn').style.display = 'none';
+      document.getElementById('custName').focus();
+    }
+
+    function placeOrder() {
+      var name = document.getElementById('custName').value.trim();
+      var phone = document.getElementById('custPhone').value.trim();
+      if (!name || !phone) {
+        alert('Please enter your name and phone number.');
+        return;
+      }
+
+      // Generate a ref
+      var ref = 'TOS-' + Math.random().toString(36).toUpperCase().substr(2, 6);
+      var eta = orderType === 'delivery' ? '40–55 minutes' : '20–30 minutes';
+
+      // Build summary HTML
+      var keys = Object.keys(basket);
+      var subtotal = 0;
+      var summaryHtml = '';
+      keys.forEach(function (k) {
+        var item = basket[k];
+        subtotal += item.p * item.qty;
+        summaryHtml += '<div><span>' + (item.qty > 1 ? item.qty + '× ' : '') + item.n + '</span><span>£' + (item.p * item.qty).toFixed(2) + '</span></div>';
+      });
+      var delivery = (orderType === 'delivery' && subtotal < 15) ? 1.50 : 0;
+      summaryHtml += '<div><span><strong>Total</strong></span><span><strong>£' + (subtotal + delivery).toFixed(2) + '</strong></span></div>';
+
+      document.getElementById('confirmName').textContent = name;
+      document.getElementById('confirmRef').textContent = ref;
+      document.getElementById('confirmTime').textContent = eta + ' (' + (orderType === 'delivery' ? 'delivery' : 'collection') + ')';
+      document.getElementById('confirmPhone').textContent = phone;
+      document.getElementById('confirmSummary').innerHTML = summaryHtml;
+      document.getElementById('confirmOverlay').classList.add('show');
+    }
+
+    function closeConfirm() {
+      document.getElementById('confirmOverlay').classList.remove('show');
+      basket = {};
+      document.getElementById('detailsForm').classList.remove('show');
+      document.getElementById('checkoutBtn').style.display = 'block';
+      document.getElementById('custName').value = '';
+      document.getElementById('custPhone').value = '';
+      document.getElementById('custAddress').value = '';
+      document.getElementById('custNotes').value = '';
+      renderBasket();
+    }
+
+    // Expose globals needed by inline handlers
+    window.setType = setType;
+    window.showDetails = showDetails;
+    window.placeOrder = placeOrder;
+    window.closeConfirm = closeConfirm;
+
+    // ── Init ──────────────────────────────────────────────────────────────
+    renderMenu();
+    renderBasket();
+  }());
+  </script>
+</body>
+</html>
