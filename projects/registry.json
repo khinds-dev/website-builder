@@ -1,13 +1,13 @@
 {
   "version": "1.0.0",
-  "activeProject": "the-barbers-at-number-two",
+  "activeProject": "touch-of-spice",
   "projects": {
     "the-barbers-at-number-two": {
       "slug": "the-barbers-at-number-two",
       "name": "The Barbers At Number Two",
       "status": "completed",
       "type": "redesign",
-      "path": "showcase/the-barbers-at-number-two",
+      "path": "projects/the-barbers-at-number-two",
       "sourceUrl": "http://thebarbersatnumberone.co.uk/",
       "createdAt": "2026-09-29T20:00:00.000Z",
       "updatedAt": "2026-09-29T21:30:00.000Z",
@@ -30,6 +30,31 @@
           "action": "verification_and_docs",
           "note": "Ran QA audit (8/8 pages passed) and published PROGRESS.md.",
           "pages": ["PROGRESS.md"]
+        }
+      ]
+    },
+    "touch-of-spice": {
+      "slug": "touch-of-spice",
+      "name": "Touch of Spice",
+      "status": "completed",
+      "type": "redesign",
+      "path": "projects/touch-of-spice",
+      "sourceUrl": "https://touchofspiceeastleigh.com/",
+      "createdAt": "2026-09-30T09:21:00.000Z",
+      "updatedAt": "2026-09-30T13:11:00.000Z",
+      "summary": "Full 4-page Indian takeaway redesign with warm cream/espresso/red/gold design tokens, complete accordion menu (25+ categories), SEO meta, sitemap.xml, robots.txt, and accessible fixed navbar.",
+      "history": [
+        {
+          "timestamp": "2026-09-30T09:21:00.000Z",
+          "action": "scaffold_and_audit",
+          "note": "Fetched and audited touchofspiceeastleigh.com (OrderYOYO SaaS). Built 4 pages from scraped content.",
+          "pages": ["index.html", "menu", "find-us", "contact"]
+        },
+        {
+          "timestamp": "2026-09-30T13:11:00.000Z",
+          "action": "verification_and_push",
+          "note": "CLI verify passed 4/4 pages with zero issues. Pushed to main (commit b6b5eb0).",
+          "pages": ["index.html", "menu/index.html", "find-us/index.html", "contact/index.html"]
         }
       ]
     }
