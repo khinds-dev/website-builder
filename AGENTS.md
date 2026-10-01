@@ -19,6 +19,8 @@ This file provides guidance to agents when working with code in this repository 
 - **Shared Design Tokens**: All generated sites utilize `css/shared.css` with CSS variables for light & dark modes, layout max-width, spacing, and typography.
 - **Fixed Navbar Standard**: Always adhere to `position: fixed` for `.navbar` with `padding-top: var(--nav-height)` on `body` and `scroll-padding-top: var(--nav-height)` on `html`. Never use `position: sticky` on a flex `body`.
 - **External Link & Contact Fidelity**: Never modify, invent, or rebrand external URLs, social media handles (`facebook.com`, `instagram.com`, `whatsapp.com`, etc.), phone numbers, or addresses when redesigning or creating showcase variations. All real-world external links must be preserved verbatim.
+- **Canonical Output Directory**: All generated or redesigned sites go into `projects/<slug>/`. Never use `sites/`, `showcase/`, or any other directory. After creating a project, always register it in `projects/registry.json` with its slug, name, path, sourceUrl, and status.
+- **Known CLI Bug — `cli.js new` `path is not defined`**: The `node bin/cli.js new` command currently errors with `path is not defined`. Do not attempt to debug it mid-task. Create the output directory and files manually, or use `cli.js enhance` instead. The bug should be fixed separately.
 
 ---
 
@@ -128,3 +130,4 @@ This file provides guidance to agents when working with code in this repository 
    cp projects/<slug>/js/nav.js templates/themes/<industry>/nav.js
    # Then document it in templates/README.md
    ```
+7. **Clean up stale CLI scaffold pages before verify**: After running `cli.js enhance`, the CLI may generate placeholder pages (e.g. `about/index.html`, `404.html`, `/work/`) that don't belong to the specific project and contain broken links. Always check for and delete these before running `node bin/cli.js verify`, or they will produce false failures.

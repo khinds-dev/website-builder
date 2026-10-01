@@ -59,31 +59,51 @@ Whenever reviewing or redesigning an existing website, ALWAYS structure your out
 
 ## 🚀 Execution Workflow
 
+### Step 0: Establish Intent — Showcase or Live?
+
+**Before doing anything else**, determine whether the site is a **showcase/pitch** or a **live replacement**.
+
+> "Is this site for showing a client what their new site could look like, or will it be deployed as their actual live website?"
+
+| Intent | Behaviour |
+|---|---|
+| **Showcase / pitch** | Replace ALL external SaaS links (ordering platforms, booking widgets, third-party forms) with in-site dummy equivalents (e.g. `/order/`, `/book/`). The goal is to demonstrate a fully self-contained, superior experience. |
+| **Live replacement** | Preserve functional external links. Only replace if the client has confirmed a new provider. |
+
+If the user has not made this clear, **default to showcase mode** for any redesign of an existing business website.
+
+---
+
 ### A. When Creating a Website from Scratch
 1. Determine the site topic, name, primary pages (e.g., Home, About, Projects/Work, Contact).
 2. Run the generator script or use the `website-builder` CLI:
    ```bash
-   node bin/cli.js new ./sites/<site-name> --name "<Site Name>" --desc "<Description>"
+   node bin/cli.js new ./projects/<site-name> --name "<Site Name>" --desc "<Description>"
    ```
+   > ⚠️ Known issue: `cli.js new` may error with `path is not defined`. If so, create the directory and files manually instead.
 3. Customize page copy, sections, and tokens to match the user's specific theme and personality.
+4. Check `templates/themes/` for an existing palette that matches the industry — use it as a starting point rather than creating tokens from scratch.
 
 ### B. When Enhancing / Redesigning an Existing Website URL
-1. Fetch and analyze the target URL:
+1. **Establish showcase vs live intent** (see Step 0 above).
+2. Fetch and analyze the target URL:
    ```bash
    node bin/cli.js analyze <URL>
    ```
-   Or use the `web_fetch` tool to inspect the raw HTML.
-2. **Preserve Original External Links**: Always preserve original external links, social media URLs (Facebook, Instagram, WhatsApp, Twitter/X, TikTok, LinkedIn, YouTube), phone numbers, email addresses, and physical addresses exactly as discovered from the original website. Do not invent, alter, or rename external profile handles.
-3. Present a concise diagnostic summary to the user:
-   - What's working well vs. what is suboptimal (SEO, accessibility, visual hierarchy, mobile readiness).
-   - Proposed improvements.
-4. Generate the enhanced redesign:
+   Or use the `web_fetch` tool to inspect the raw HTML. Fetch all available pages, not just the homepage.
+3. **Preserve Original External Links**: Always preserve original external links, social media URLs (Facebook, Instagram, WhatsApp, Twitter/X, TikTok, LinkedIn, YouTube), phone numbers, email addresses, and physical addresses exactly as discovered from the original website. Do not invent, alter, or rename external profile handles.
+4. Present a concise diagnostic summary to the user.
+5. Generate the enhanced redesign into `./projects/<slug>/`:
    ```bash
-   node bin/cli.js enhance <URL> ./sites/<redesigned-site> --name "<Site Name>"
+   node bin/cli.js enhance <URL> ./projects/<redesigned-site> --name "<Site Name>"
    ```
-5. Ensure `robots.txt` and `sitemap.xml` are populated and present at the root.
-6. Review the generated HTML and refine the content, cards, and styling to make the site look polished, modern, and ultra-fast.
-7. Run verification before delivery:
-   ```bash
-   node bin/cli.js verify ./sites/<redesigned-site>
-   ```
+6. **Clean up stale scaffold pages**: Delete any CLI-generated pages that don't belong (e.g. `about/index.html`, `404.html`, `/work/`) before running verify. These contain placeholder links that will fail the audit.
+7. Ensure `robots.txt` and `sitemap.xml` are populated and present at the root.
+8. **In showcase mode**: replace any external SaaS ordering/booking links with branded in-site dummy pages. Copy `templates/components/order-page/` as a starting point for food businesses.
+9. **Use keyless Google Maps embed** for any location map — see `.bob/rules/google-maps-embed.md`.
+10. Review the generated HTML and refine the content, cards, and styling to make the site look polished, modern, and ultra-fast.
+11. Run verification before delivery:
+    ```bash
+    node bin/cli.js verify ./projects/<redesigned-site>
+    ```
+12. **Save theme to library**: Copy the project's CSS and JS into `templates/themes/<industry>/` and update `templates/README.md`.
